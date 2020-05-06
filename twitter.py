@@ -1,16 +1,20 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import tweepy
 import time
+from configparser import ConfigParser
 
-auth = tweepy.OAuthHandler("A0rCRsOD3ThFxX74LhmGrnlRN","l9v6dNA3fy9kFkaWjasc4lKPTfdXb7cQNNfgb2Ny0wul4HG9qN")
+parser = ConfigParser()
+parser.read('credentials.ini')
+key_1 = parser.get('TwitterCredentials','key_1')
+key_2 = parser.get('TwitterCredentials','key_2')
+key_3 = parser.get('TwitterCredentials','key_3')
+key_4 = parser.get('TwitterCredentials','key_4')
 
-auth.set_access_token("324455633-MUvZwwyxRhVeSwEfcJ35xAo0dqgBE574x56Kg54X","a0RDrZ5NNMvouGNdVExc6tOtWxZiQ3ZnUzoTsb1kKbWoh")
+auth    = tweepy.OAuthHandler(key_1,key_2)
+auth.set_access_token(key_3,key_4)
 
-api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-user = api.me()
+api     = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+user    = api.me()
 
 # print(user) #Brings back user data
 
