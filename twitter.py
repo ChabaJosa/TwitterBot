@@ -1,7 +1,8 @@
-import tweepy
-import time
-import random
-from configparser import ConfigParser
+import  tweepy
+import  time
+import  random
+from    configparser import ConfigParser
+import  pprint
 
 parser = ConfigParser()
 parser.read('credentials.ini')
@@ -28,13 +29,13 @@ searchGlobal    = random.choice(topics)
 tweetQty        = len(topics)*random.choice(thyTimes)
 
 #With Variating Keywords
-def RetweetRandom(NumberOfRetweets):
+def RetweetRandomTopics(NumberOfRetweets):
     
     for i in range(0,NumberOfRetweets):
         search   = random.choice(topics)
-        for tweet in tweepy.Cursor(api.search, search).items(1):
+        for tweet in tweepy.Cursor(api.search, searchGlobal).items(1):
             try:
-                print("Tweet Retweeted with the keyword: ", search)
+                print("Tweet Retweeted with the random keyword: ", search)
                 tweet.retweet()
                 time.sleep(random.choice(thyTimes))
             except tweepy.TweepError as e:
@@ -42,25 +43,25 @@ def RetweetRandom(NumberOfRetweets):
             except StopIteration:
                 break
 
-def FavoriteRandom(NumberOfRetweets):
+def FavoriteRandomTopics(NumberOfLikes):
 
-    for i in range(0,NumberOfRetweets):
-        try:
-            print("Tweet Liked with the keyword: ", search)
-            tweet.favorite()
-            time.sleep(random.choice(thyTimes))
-        except tweepy.TweepError as e:
-            print(e.reason)
-        except StopIteration:
-            break
-
+    for i in range(0,NumberOfLikes):
+        for tweet in tweepy.Cursor(api.search, searchGlobal).items(1):
+            try:
+                print("Tweet Liked with the random keyword: ", searchGlobal)
+                tweet.favorite()
+                time.sleep(random.choice(thyTimes))
+            except tweepy.TweepError as e:
+                print(e.reason)
+            except StopIteration:
+                break
 
 #With plenty of one specific keyword
-def RetweetTopic():
-
-    for tweet in tweepy.Cursor(api.search, searchGlobal).items(tweetQty):
+def RetweetAboutSpecificTopic(topicOfChoice, NumberOfRetweets):
+    
+    for tweet in tweepy.Cursor(api.search, topicOfChoice).items(NumberOfRetweets):
         try:
-            print("Tweet Retweeted with the keyword: ", search)
+            print("Tweet Retweeted with the specific keyword: ", topicOfChoice)
             tweet.retweet()
             time.sleep(random.choice(thyTimes))
         except tweepy.TweepError as e:
@@ -68,11 +69,11 @@ def RetweetTopic():
         except StopIteration:
             break
 
-def FavoriteTopic():
+def FavoriteAboutSpecificTopic(topicOfChoice, NumberOfLikes):
 
-    for tweet in tweepy.Cursor(api.search, searchGlobal).items(tweetQty):
+    for tweet in tweepy.Cursor(api.search, topicOfChoice).items(NumberOfLikes):
         try:
-            print("Tweet Liked with the keyword: ", search)
+            print("Tweet Liked with the specific keyword: ", topicOfChoice)
             tweet.favorite()
             time.sleep(random.choice(thyTimes))
         except tweepy.TweepError as e:
@@ -81,20 +82,20 @@ def FavoriteTopic():
             break
 
 #Following / Getting Followers
-def followTechie():  
+def followTechies():  
     # Try using RegEx here
-    print(api.search_users("Web Developer"[2][10]))
+    # print(api.search_users("Web Developer"[2][10]))
     # for follower in tweepy.Cursor(api.followers).items(): #Prints out all the users
     #     print(follower.name).encode("utf-8")
-    # for follower in tweepy.Cursor(api.followers).items():
-    #     follower.follow()
+    for follower in tweepy.Cursor(api.followers).items():
+        pprint.pprint(follower.description)
+        # follower.follow()
 
 
-def randomness(argument):
-    print(argument)
-    randomFunks = [RetweetRandom(10), FavoriteRandom(10), FavoriteTopic(), RetweetTopic() ]
-    random.choice(randomFunks)
+def randomness():
+    print("Hello")
+    # The arguments are for each are how many 
+    randomFunks = [RetweetRandomTopics(1), FavoriteRandomTopics(2), RetweetAboutSpecificTopic("ReactJS", 1), FavoriteAboutSpecificTopic("ReactNative", 1), followTechies() ]
 
+randomness()
 
-
-randomness("Argument")
